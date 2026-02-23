@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "xcrap"
+version = "0.1.0"
+description = ""
+authors = ["Marcuth <contact@marcuth.dev>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+parsel = "^1.11.0"
+jmespath = "^1.1.0"
+httpx = "^0.28.1"
+pydantic = "^2.12.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
