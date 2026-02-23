@@ -15,7 +15,7 @@ class HttpxClient(HttpClient):
         super().__init__(proxy_url, proxy, user_agent)
         self.httpx_client = httpx.AsyncClient()
 
-    async def fetch(self, url: str, method: str, retries: Optional[int], max_retries: Optional[int], retry_delay: Optional[int]) -> HttpResponse:
+    async def fetch(self, url: str, method: str = "GET", retries: Optional[int] = 0, max_retries: Optional[int] = 0, retry_delay: Optional[int] = 0) -> HttpResponse:
         max_retries = max_retries or 0
         retries = retries or 0
         retry_delay = retry_delay or 0

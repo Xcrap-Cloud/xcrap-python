@@ -31,7 +31,7 @@ class HttpClient(ABC):
         self.user_agent = user_agent or DEFAULT_USER_AGENT
 
     @abstractmethod
-    async def fetch(self, url: str, method: str, retries: Optional[int], max_retries: Optional[int], retry_delay: Optional[int]) -> HttpResponse:
+    async def fetch(self, url: str, method: str = "GET", retries: Optional[int] = 0, max_retries: Optional[int] = 0, retry_delay: Optional[int] = 0) -> HttpResponse:
         pass
 
     @abstractmethod

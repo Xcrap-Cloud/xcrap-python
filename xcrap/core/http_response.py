@@ -2,6 +2,7 @@ from typing import Optional, TypedDict, TypeVar
 import json
 
 from ..extractor.source_parser import SourceParser
+from ..extractor.html_parser import HtmlParser
 
 SourceParserType = TypeVar("SourceParserType", bound=SourceParser)
 
@@ -42,6 +43,9 @@ class HttpResponse:
 
     def as_parser(self, parser: type[SourceParserType]) -> SourceParserType:
         return parser(self.body)
+
+    def as_html_parser(self) -> HtmlParser:
+        return HtmlParser(self.body)
 
 __all__ = [
     "HttpResponse",

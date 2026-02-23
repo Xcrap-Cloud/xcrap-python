@@ -1,7 +1,5 @@
-from xcrap.extractor.html_extraction_model import HtmlExtractionModel, HtmlBaseField, HtmlNestedField
-from xcrap.extractor.query_builders import css
+from xcrap.extractor import HtmlExtractionModel, HtmlBaseField, HtmlNestedField, css
 
-# 1. Declarative definition!
 class AuthorModel(HtmlExtractionModel):
     name = HtmlBaseField(
         query = css("span.author-name::text")
@@ -9,7 +7,7 @@ class AuthorModel(HtmlExtractionModel):
 
 class PostModel(HtmlExtractionModel):
     title = HtmlBaseField(
-        query = css("h1::text")
+        query = css("h1::text"),
     )
     tags = HtmlBaseField(
         query = css("ul.tags li::text"),
