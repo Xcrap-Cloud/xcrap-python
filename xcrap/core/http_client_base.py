@@ -1,10 +1,10 @@
-from typing import TypedDict, Optional, Callable
-from abc import ABC, abstractmethod
 import asyncio
+from abc import ABC, abstractmethod
+from typing import Callable, Optional, TypedDict
 
 from ..utils.constants import DEFAULT_USER_AGENT
-from .http_response import HttpResponse
 from ..utils.resolve import resolve
+from .http_response import HttpResponse
 
 
 class HttpClientFetchOptions(TypedDict):

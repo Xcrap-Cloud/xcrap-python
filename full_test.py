@@ -1,6 +1,7 @@
-from xcrap.extractor import HtmlExtractionModel, HtmlBaseField, HtmlNestedField, css
-from xcrap.clients import HttpxClient
 import asyncio
+
+from xcrap.clients import HttpxClient
+from xcrap.extractor import HtmlBaseField, HtmlExtractionModel, HtmlNestedField, css
 
 
 class AuthorModel(HtmlExtractionModel):

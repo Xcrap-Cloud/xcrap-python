@@ -1,9 +1,9 @@
 from .http_client_base import (
+    ExecuteRequestOptions,
     HttpClientBase,
     HttpClientFetchOptions,
-    ExecuteRequestOptions,
 )
-from .http_response import HttpResponse, FailedAttempt
+from .http_response import FailedAttempt, HttpResponse
 
 __all__ = [
     "HttpClientBase",

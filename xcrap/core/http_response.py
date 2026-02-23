@@ -1,8 +1,8 @@
-from typing import Optional, TypedDict, TypeVar
 import json
+from typing import Optional, TypedDict, TypeVar
 
-from ..extractor.source_parser import SourceParser
 from ..extractor.html_parser import HtmlParser
+from ..extractor.source_parser import SourceParser
 
 SourceParserType = TypeVar("SourceParserType", bound=SourceParser)
 

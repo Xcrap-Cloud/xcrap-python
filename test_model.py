@@ -1,4 +1,4 @@
-from xcrap.extractor import HtmlExtractionModel, HtmlBaseField, HtmlNestedField, css
+from xcrap.extractor import HtmlBaseField, HtmlExtractionModel, HtmlNestedField, css
 
 
 class AuthorModel(HtmlExtractionModel):

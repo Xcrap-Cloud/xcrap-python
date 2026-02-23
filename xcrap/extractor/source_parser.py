@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import TypeVar, Type
+from abc import ABC
+from typing import Type, TypeVar
 
 SourceParserType = TypeVar("SourceParserType", bound="SourceParser")
 

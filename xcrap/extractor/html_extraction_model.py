@@ -1,6 +1,7 @@
-from typing import Any, Dict, Optional, Union, Type
-from pydantic import BaseModel
+from typing import Any, Dict, Optional, Type, Union
+
 from parsel import Selector
+from pydantic import BaseModel
 
 from .extracton_model import ExtractionModel
 from .query_builders import QueryConfig

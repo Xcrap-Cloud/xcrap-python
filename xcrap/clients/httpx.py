@@ -1,13 +1,14 @@
-from typing import Optional, Callable
 import asyncio
 import time
+from typing import Callable, Optional
+
 import httpx
 
 from ..core import (
+    ExecuteRequestOptions,
     HttpClientBase,
     HttpClientFetchOptions,
     HttpResponse,
-    ExecuteRequestOptions,
 )
 
 

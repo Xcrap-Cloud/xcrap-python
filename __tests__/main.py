@@ -1,4 +1,5 @@
 import asyncio
+
 from xcrap.clients import HttpxClient
 from xcrap.extractor import HtmlParser
 

@@ -1,6 +1,6 @@
-from .query_builders import css, xpath
+from .html_extraction_model import HtmlBaseField, HtmlExtractionModel, HtmlNestedField
 from .html_parser import HtmlParser
-from .html_extraction_model import HtmlExtractionModel, HtmlBaseField, HtmlNestedField
+from .query_builders import css, xpath
 from .source_parser import SourceParser
 
 __all__ = [
