@@ -47,6 +47,21 @@ def test_html_extraction_model_should_extract_single_base_fields() -> None:
     assert expected["title"] == data["title"]
     assert expected["description"] == data["description"]
     
+def test_html_extraction_model_should_return_default_value_when_element_dont_exists() -> None:
+    expected = {
+        "xpto": "DEFAULT_VALUE"
+    }
+    
+    class MyExtractionModel(HtmlExtractionModel):
+        xpto = HtmlBaseField(
+            query = css(".xpto"),
+            default = "DEFAULT_VALUE"
+        )
+        
+    data = parser.extract_model(MyExtractionModel)
+    
+    assert expected["xpto"] == data["xpto"]
+    
 def test_html_extraction_model_should_extract_multiple_base_fields() -> None:
     expected = {
         "items": ["Item 1", "Item 2", "Item 3", "Item 4"]
