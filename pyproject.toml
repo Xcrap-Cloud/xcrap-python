@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "xcrap"
-version = "0.1.0"
-description = ""
+version = "0.0.1"
+description = "A modern, declarative, and modular web scraping framework for Python."
 authors = ["Marcuth <contact@marcuth.dev>"]
 readme = "README.md"
+repository = "https://github.com/Xcrap-Cloud/xcrap-python"
+keywords = ["scraping", "crawler", "pydantic", "parsel", "html"]
+
 
 [tool.poetry.dependencies]
 python = "^3.12"
