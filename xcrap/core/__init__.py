@@ -1,8 +1,12 @@
-from .http_client import HttpClient, HttpClientFetchOptions, ExecuteRequestOptions
+from .http_client_base import (
+    HttpClientBase,
+    HttpClientFetchOptions,
+    ExecuteRequestOptions,
+)
 from .http_response import HttpResponse, FailedAttempt
 
 __all__ = [
-    "HttpClient",
+    "HttpClientBase",
     "HttpClientFetchOptions",
     "ExecuteRequestOptions",
     "HttpResponse",

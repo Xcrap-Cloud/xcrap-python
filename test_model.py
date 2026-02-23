@@ -1,25 +1,18 @@
 from xcrap.extractor import HtmlExtractionModel, HtmlBaseField, HtmlNestedField, css
 
+
 class AuthorModel(HtmlExtractionModel):
-    name = HtmlBaseField(
-        query = css("span.author-name::text")
-    )
+    name = HtmlBaseField(query=css("span.author-name::text"))
+
 
 class PostModel(HtmlExtractionModel):
     title = HtmlBaseField(
-        query = css("h1::text"),
+        query=css("h1::text"),
     )
-    tags = HtmlBaseField(
-        query = css("ul.tags li::text"),
-        multiple = True
-    )
-    author = HtmlNestedField(
-        query = css("div.author-info"),
-        model = AuthorModel
-    )
-    link = HtmlBaseField(
-        query = css("a.source::attr(href)")
-    )
+    tags = HtmlBaseField(query=css("ul.tags li::text"), multiple=True)
+    author = HtmlNestedField(query=css("div.author-info"), model=AuthorModel)
+    link = HtmlBaseField(query=css("a.source::attr(href)"))
+
 
 def test_extraction():
     html = """
@@ -41,15 +34,16 @@ def test_extraction():
     # 2. Just instantiate and extract!
     model = PostModel()
     result = model.extract(html)
-    
+
     print(f"Extraction result: {result}")
-    
+
     # Verification
-    assert result['title'] == 'Hello World'
-    assert result['tags'] == ['Python', 'Scraping']
-    assert result['author']['name'] == 'John Doe'
-    assert result['link'] == 'https://example.com'
+    assert result["title"] == "Hello World"
+    assert result["tags"] == ["Python", "Scraping"]
+    assert result["author"]["name"] == "John Doe"
+    assert result["link"] == "https://example.com"
     print("Test passed!")
+
 
 if __name__ == "__main__":
     test_extraction()

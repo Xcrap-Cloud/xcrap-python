@@ -3,6 +3,7 @@ from typing import TypeVar, Type
 
 SourceParserType = TypeVar("SourceParserType", bound="SourceParser")
 
+
 class SourceParser(ABC):
     def __init__(self, content: str) -> None:
         self.content = content
@@ -13,5 +14,6 @@ class SourceParser(ABC):
             file_content = file.read()
 
         return cls(file_content)
+
 
 __all__ = ["SourceParser"]

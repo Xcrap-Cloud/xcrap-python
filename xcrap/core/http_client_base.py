@@ -6,6 +6,7 @@ from ..utils.constants import DEFAULT_USER_AGENT
 from .http_response import HttpResponse
 from ..utils.resolve import resolve
 
+
 class HttpClientFetchOptions(TypedDict):
     url: str
     method: str
@@ -13,13 +14,15 @@ class HttpClientFetchOptions(TypedDict):
     max_retries: Optional[int]
     retry_delay: Optional[int]
 
+
 class ExecuteRequestOptions(TypedDict):
     index: int
     request: HttpClientFetchOptions
     results: list[HttpResponse | None]
     request_delay: Optional[int]
 
-class HttpClient(ABC):
+
+class HttpClientBase(ABC):
     def __init__(
         self,
         proxy_url: Optional[str | Callable[[], str]] = None,
@@ -31,11 +34,23 @@ class HttpClient(ABC):
         self.user_agent = user_agent or DEFAULT_USER_AGENT
 
     @abstractmethod
-    async def fetch(self, url: str, method: str = "GET", retries: Optional[int] = 0, max_retries: Optional[int] = 0, retry_delay: Optional[int] = 0) -> HttpResponse:
+    async def fetch(
+        self,
+        url: str,
+        method: str = "GET",
+        retries: Optional[int] = 0,
+        max_retries: Optional[int] = 0,
+        retry_delay: Optional[int] = 0,
+    ) -> HttpResponse:
         pass
 
     @abstractmethod
-    async def fetch_many(self, requests: list[HttpClientFetchOptions], request_delay: Optional[int], concurrency: Optional[int]) -> list[HttpResponse]:
+    async def fetch_many(
+        self,
+        requests: list[HttpClientFetchOptions],
+        request_delay: Optional[int],
+        concurrency: Optional[int],
+    ) -> list[HttpResponse]:
         pass
 
     @property
@@ -50,7 +65,9 @@ class HttpClient(ABC):
     def _current_user_agent(self) -> str:
         return resolve(self.user_agent)
 
-    def _should_throttle(self, executing: list[asyncio.Task], concurrency: Optional[int]) -> bool:
+    def _should_throttle(
+        self, executing: list[asyncio.Task], concurrency: Optional[int]
+    ) -> bool:
         return concurrency is not None and len(executing) >= concurrency
 
     def _clean_completed_tasks(self, executing: list[asyncio.Task]) -> None:

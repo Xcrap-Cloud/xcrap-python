@@ -6,9 +6,11 @@ from ..extractor.html_parser import HtmlParser
 
 SourceParserType = TypeVar("SourceParserType", bound=SourceParser)
 
+
 class FailedAttempt(TypedDict):
     timestamp: int
     error: str
+
 
 class HttpResponse:
     def __init__(
@@ -46,6 +48,7 @@ class HttpResponse:
 
     def as_html_parser(self) -> HtmlParser:
         return HtmlParser(self.body)
+
 
 __all__ = [
     "HttpResponse",
