@@ -38,11 +38,7 @@ class HttpxClient(HttpClientBase):
 
         async def attempt_request(current_retry: int) -> HttpResponse:
             try:
-                target_url = (
-                    f"{self._current_proxy_url}{url}"
-                    if self._current_proxy_url
-                    else url
-                )
+                target_url = f"{self._current_proxy_url}{url}" if self._current_proxy_url else url
 
                 response = await self.httpx_client.request(
                     method=method,
@@ -69,9 +65,7 @@ class HttpxClient(HttpClientBase):
             except Exception as error:
                 error_message = str(error)
 
-                failed_attempts.append(
-                    {"error": error_message, "timestamp": int(time.time())}
-                )
+                failed_attempts.append({"error": error_message, "timestamp": int(time.time())})
 
                 if current_retry < max_retries:
                     if retry_delay and retry_delay > 0:

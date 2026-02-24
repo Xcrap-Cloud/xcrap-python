@@ -74,11 +74,7 @@ class HtmlExtractionModel(ExtractionModel):
                 elements = elements[: value.limit]
 
             results = elements.getall()
-            return (
-                results
-                if results
-                else (value.default if value.default is not None else [])
-            )
+            return results if results else (value.default if value.default is not None else [])
         else:
             result = elements.get()
             if result is None:
@@ -95,9 +91,7 @@ class HtmlExtractionModel(ExtractionModel):
 
         if value.multiple:
             if value.query is None:
-                raise Exception(
-                    "Query is required for nested model with multiple values"
-                )
+                raise Exception("Query is required for nested model with multiple values")
 
             if value.limit is not None:
                 elements = elements[: value.limit]
@@ -107,11 +101,7 @@ class HtmlExtractionModel(ExtractionModel):
             for el in elements:
                 results.append(model.extract(el))
 
-            return (
-                results
-                if results
-                else (value.default if value.default is not None else [])
-            )
+            return results if results else (value.default if value.default is not None else [])
 
         else:
             element = elements[0] if len(elements) > 0 else None

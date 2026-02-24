@@ -11,17 +11,13 @@ class HtmlParser(SourceParser):
     def __init__(self, content: str) -> None:
         self.selector = Selector(text=content)
 
-    def extract_value(
-        self, query: QueryConfig, default: Optional[str] = None
-    ) -> Optional[str]:
+    def extract_value(self, query: QueryConfig, default: Optional[str] = None) -> Optional[str]:
         elements = self._select_elements(query)
         result = elements.get()
 
         return result if result is not None else default
 
-    def extract_values(
-        self, query: QueryConfig, limit: Optional[int] = None
-    ) -> list[str]:
+    def extract_values(self, query: QueryConfig, limit: Optional[int] = None) -> list[str]:
         elements = self._select_elements(query)
 
         if limit is not None:
@@ -29,9 +25,7 @@ class HtmlParser(SourceParser):
 
         return elements.getall()
 
-    def extract_model(
-        self, model: type[HtmlExtractionModel], query: Optional[QueryConfig] = None
-    ) -> Any:
+    def extract_model(self, model: type[HtmlExtractionModel], query: Optional[QueryConfig] = None) -> Any:
         element = self._select_elements(query)[0] if query else self.selector
 
         return model().extract(element)

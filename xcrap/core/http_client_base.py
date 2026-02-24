@@ -65,9 +65,7 @@ class HttpClientBase(ABC):
     def _current_user_agent(self) -> str:
         return resolve(self.user_agent)
 
-    def _should_throttle(
-        self, executing: list[asyncio.Task], concurrency: Optional[int]
-    ) -> bool:
+    def _should_throttle(self, executing: list[asyncio.Task], concurrency: Optional[int]) -> bool:
         return concurrency is not None and len(executing) >= concurrency
 
     def _clean_completed_tasks(self, executing: list[asyncio.Task]) -> None:
