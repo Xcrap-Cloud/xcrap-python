@@ -1,5 +1,4 @@
 from xcrap.extractor import SourceParser
-from tests.extractor.test_html_extraction_model import parser
 
 def test_source_parser_should_defined() -> None:
     assert SourceParser
