@@ -124,3 +124,20 @@ def test_html_extraction_model_extract_nested_model_with_query() -> None:
     data = parser.extract_model(MyExtractionModel)
 
     assert expected == data
+
+def test_html_extraction_model_should_return_default_when_not_found_nested_element() -> None:
+    expected = {"user": { "name": "Marcuth" }}
+    
+    class MyNestedExtractionModel(HtmlExtractionModel):
+        name = HtmlBaseField(query=css("span#display-name::text"))
+    
+    class MyExtractionModel(HtmlExtractionModel):
+        user = HtmlNestedField(
+            query = css(".a-false-query"),
+            model = MyNestedExtractionModel,
+            default = expected["user"]
+        )
+        
+    data = parser.extract_model(MyExtractionModel)
+
+    assert expected == data
