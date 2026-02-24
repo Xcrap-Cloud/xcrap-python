@@ -1,6 +1,6 @@
 from .html_extraction_model import HtmlBaseField, HtmlExtractionModel, HtmlNestedField
 from .html_parser import HtmlParser
-from .query_builders import css, xpath
+from .query_builders import css, xpath, QueryConfig
 from .source_parser import SourceParser
 
 __all__ = [
@@ -11,4 +11,5 @@ __all__ = [
     "HtmlBaseField",
     "HtmlNestedField",
     "SourceParser",
+    "QueryConfig",
 ]
