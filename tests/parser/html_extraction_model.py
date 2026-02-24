@@ -1,5 +1,6 @@
 from xcrap.extractor import HtmlParser, HtmlExtractionModel, HtmlBaseField, HtmlNestedField
 from xcrap.extractor.query_builders import css
+import pytest
 
 parser = HtmlParser("""
 <html>
@@ -141,3 +142,16 @@ def test_html_extraction_model_should_return_default_when_not_found_nested_eleme
     data = parser.extract_model(MyExtractionModel)
 
     assert expected == data
+    
+def test_html_extraction_model_should_raise_exception_when_not_defined_query_on_multiple_nested_model() -> None:    
+    class MyNestedExtractionModel(HtmlExtractionModel):
+        name = HtmlBaseField(query=css("xpto"))
+    
+    class MyExtractionModel(HtmlExtractionModel):
+        user = HtmlNestedField(
+            model = MyNestedExtractionModel,
+            multiple = True, 
+        )
+        
+    with pytest.raises(Exception):
+        parser.extract_model(MyExtractionModel)
