@@ -68,7 +68,10 @@ class MySecureClient(HttpxClient):
 ```
 
 ### 🏭 Sistema de Factories
-Crie modelos e clientes a partir de configurações JSON/Dicionários, ideal para sistemas dinâmicos.
+O sistema de Factory permite a criação dinâmica de componentes a partir de arquivos de configuração (JSON/Dict), facilitando a manutenção de bots sem alteração de código.
+
+#### 1. Model Factory
+Constrói modelos complexos de forma recursiva:
 
 ```python
 from xcrap.factory import create_parsing_model
@@ -77,12 +80,43 @@ from xcrap.extractor import HtmlExtractionModel
 config = {
     "type": "html",
     "model": {
-        "title": {"query": {"type": "css", "value": "h1::text"}}
+        "title": {"query": {"type": "css", "value": "h1::text"}},
+        "items": {
+            "query": {"type": "css", "value": "li"},
+            "multiple": true,
+            "nested": {
+                "type": "html",
+                "model": {"name": {"query": {"type": "css", "value": "span::text"}}}
+            }
+        }
     }
 }
 
 model = create_parsing_model(config, allowed_models={"html": HtmlExtractionModel})
-data = model.extract("<h1>Hello!</h1>")
+```
+
+#### 2. Client Factory
+Instancia clientes com configurações específicas:
+
+```python
+from xcrap.factory import create_client
+from xcrap.clients import HttpxClient
+
+client = create_client(
+    client_type="httpx",
+    allowed_clients={"httpx": HttpxClient},
+    options={"user_agent": "CustomAgent", "proxy_url": "http://..."}
+)
+```
+
+#### 3. Extractor Factory
+Cria extratores a partir de strings, suportando argumentos:
+
+```python
+from xcrap.factory import create_extractor
+
+# 'attr:src' chamará o gerador 'attr' com o argumento 'src'
+get_src = create_extractor("attr:src", allowed_extractors={"attr": lambda a: lambda el: el.attrib.get(a)})
 ```
 
 ### 🛠️ Extratores Customizados
