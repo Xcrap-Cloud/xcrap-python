@@ -189,3 +189,32 @@ async def test_httpx_client_fetch_many_hit_gather() -> None:
 
         assert len(results) == 1
         assert results[0].body == "Data"
+
+@pytest.mark.asyncio
+async def test_httpx_client_proxy_url() -> None:
+    with patch("httpx.AsyncClient") as mock_client_class:
+        mock_instance = mock_client_class.return_value
+        mock_instance.request = AsyncMock()
+        mock_instance.request.return_value = MagicMock(status_code=200, reason_phrase="OK", text="ok", headers={})
+
+        client = HttpxClient(proxy_url="http://proxy/")
+        await client.fetch(url="http://test.com")
+
+        mock_instance.request.assert_called_once()
+        args, kwargs = mock_instance.request.call_args
+        assert kwargs["url"] == "http://proxy/http://test.com"
+
+@pytest.mark.asyncio
+async def test_httpx_client_custom_headers() -> None:
+    with patch("httpx.AsyncClient") as mock_client_class:
+        mock_instance = mock_client_class.return_value
+        mock_instance.request = AsyncMock()
+        mock_instance.request.return_value = MagicMock(status_code=200, reason_phrase="OK", text="ok", headers={})
+
+        client = HttpxClient()
+        await client.fetch(url="http://test.com", headers={"X-Test": "Value"})
+
+        mock_instance.request.assert_called_once()
+        args, kwargs = mock_instance.request.call_args
+        assert kwargs["headers"]["X-Test"] == "Value"
+        assert "User-Agent" in kwargs["headers"]

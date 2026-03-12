@@ -29,12 +29,16 @@ class HttpxClient(HttpClientBase):
         retries: Optional[int] = 0,
         max_retries: Optional[int] = 0,
         retry_delay: Optional[int] = 0,
+        headers: Optional[dict[str, str]] = None,
     ) -> HttpResponse:
         max_retries = max_retries or 0
         retries = retries or 0
         retry_delay = retry_delay or 0
 
         failed_attempts = []
+        request_headers = {"User-Agent": self._current_user_agent}
+        if headers:
+            request_headers.update(headers)
 
         async def attempt_request(current_retry: int) -> HttpResponse:
             try:
@@ -43,7 +47,7 @@ class HttpxClient(HttpClientBase):
                 response = await self.httpx_client.request(
                     method=method,
                     url=target_url,
-                    headers={"User-Agent": self._current_user_agent},
+                    headers=request_headers,
                 )
 
                 if not self._is_success(response.status_code):

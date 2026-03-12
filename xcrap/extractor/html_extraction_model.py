@@ -1,5 +1,4 @@
-from typing import Any, Dict, Optional, Type, Union
-
+from typing import Any, Callable, Dict, Optional, Type, Union
 from parsel import Selector
 from pydantic import BaseModel
 
@@ -12,6 +11,7 @@ class HtmlBaseField(BaseModel):
     default: Optional[Any] = None
     multiple: bool = False
     limit: Optional[int] = None
+    extractor: Optional[Callable[[Selector], Any]] = None
 
 
 class HtmlNestedField(BaseModel):
@@ -20,6 +20,7 @@ class HtmlNestedField(BaseModel):
     limit: Optional[int] = None
     default: Optional[Any] = None
     multiple: bool = False
+    extractor: Optional[Callable[[Selector], Any]] = None
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -73,13 +74,22 @@ class HtmlExtractionModel(ExtractionModel):
             if value.limit is not None:
                 elements = elements[: value.limit]
 
-            results = elements.getall()
+            if value.extractor:
+                results = [value.extractor(el) for el in elements]
+            else:
+                results = elements.getall()
+
             return results if results else (value.default if value.default is not None else [])
         else:
-            result = elements.get()
-            if result is None:
+            element = elements[0] if len(elements) > 0 else None
+
+            if element is None:
                 return value.default
-            return result
+
+            if value.extractor:
+                return value.extractor(element)
+
+            return element.get()
 
     def _extract_nested_value(self, value: HtmlNestedField, root: Selector) -> Any:
         elements = self._select_elements(value.query, root) if value.query else [root]
@@ -109,7 +119,8 @@ class HtmlExtractionModel(ExtractionModel):
             if element is None:
                 return value.default
 
-            return model.extract(element)
+            source = value.extractor(element) if value.extractor else element
+            return model.extract(source)
 
     def _select_elements(self, query: QueryConfig, root: Selector):
         if query["type"] == "css":

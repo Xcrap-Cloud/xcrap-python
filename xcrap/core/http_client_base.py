@@ -13,6 +13,7 @@ class HttpClientFetchOptions(TypedDict):
     retries: Optional[int]
     max_retries: Optional[int]
     retry_delay: Optional[int]
+    headers: Optional[dict[str, str]]
 
 
 class ExecuteRequestOptions(TypedDict):
@@ -41,6 +42,7 @@ class HttpClientBase(ABC):
         retries: Optional[int] = 0,
         max_retries: Optional[int] = 0,
         retry_delay: Optional[int] = 0,
+        headers: Optional[dict[str, str]] = None,
     ) -> HttpResponse:
         pass
 
