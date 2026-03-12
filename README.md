@@ -91,6 +91,14 @@ O objetivo do Xcrap é ser modular, fácil de plugar com outros clientes Http (e
 
 Quero fazer um transformador de dados, mas, até o momento, não consegui fazer essa façanha nem no Node.js, que eu já tenho um ecossitema maior do Xcrap.
 
-Também sou um tanto quanto leigo em testes, então, se puder me ajudar com isso, eu agradeço!
+## Desenvolvimento
 
-Enfim, estamos aceitando contribuições, precismos documentar tudo isso, e muito mais! :D
+Para rodar os testes e verificar a cobertura:
+
+```bash
+poetry run pytest --cov=xcrap --cov-report=term-missing
+```
+
+Atualmente o projeto conta com **100% de cobertura de código**, garantindo a confiabilidade das extrações e do cliente HTTP.
+
+Enfim, estamos aceitando contribuições, precisamos documentar tudo isso, e muito mais! :D
