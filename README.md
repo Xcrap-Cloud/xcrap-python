@@ -74,7 +74,7 @@ O sistema de Factory permite a criação dinâmica de componentes a partir de ar
 Constrói modelos complexos de forma recursiva:
 
 ```python
-from xcrap.factory import create_parsing_model
+from xcrap.factory import create_extraction_model
 from xcrap.extractor import HtmlExtractionModel
 
 config = {
@@ -92,7 +92,7 @@ config = {
     }
 }
 
-model = create_parsing_model(config, allowed_models={"html": HtmlExtractionModel})
+model = create_extraction_model(config, allowed_models={"html": HtmlExtractionModel})
 ```
 
 #### 2. Client Factory

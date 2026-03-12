@@ -1,5 +1,5 @@
 import pytest
-from xcrap.factory import create_parsing_model
+from xcrap.factory import create_extraction_model
 from xcrap.extractor import HtmlExtractionModel, JsonExtractionModel, css, jmes_path
 
 def test_create_html_parsing_model_basic():
@@ -11,7 +11,7 @@ def test_create_html_parsing_model_basic():
     }
     allowed_models = {"html": HtmlExtractionModel}
     
-    model = create_parsing_model(config, allowed_models, allowed_extractors={})
+    model = create_extraction_model(config, allowed_models, allowed_extractors={})
     
     assert isinstance(model, HtmlExtractionModel)
     assert "title" in model.shape
@@ -30,7 +30,7 @@ def test_create_html_parsing_model_with_extractor():
         "attr": lambda name: lambda el: el.attrib.get(name)
     }
     
-    model = create_parsing_model(config, allowed_models, allowed_extractors)
+    model = create_extraction_model(config, allowed_models, allowed_extractors)
     
     assert model.shape["link"].extractor is not None
     # Test extractor function directly (mocking element)
@@ -46,7 +46,7 @@ def test_create_json_parsing_model():
     }
     allowed_models = {"json": JsonExtractionModel}
     
-    model = create_parsing_model(config, allowed_models, allowed_extractors={})
+    model = create_extraction_model(config, allowed_models, allowed_extractors={})
     
     assert isinstance(model, JsonExtractionModel)
     assert model.shape["price"].query == jmes_path("data.price")
@@ -69,7 +69,7 @@ def test_create_nested_parsing_model():
     }
     allowed_models = {"html": HtmlExtractionModel}
     
-    model = create_parsing_model(config, allowed_models, allowed_extractors={})
+    model = create_extraction_model(config, allowed_models, allowed_extractors={})
     
     assert "items" in model.shape
     assert model.shape["items"].multiple is True
@@ -93,7 +93,7 @@ def test_create_json_nested_parsing_model():
     }
     allowed_models = {"json": JsonExtractionModel}
     
-    model = create_parsing_model(config, allowed_models, allowed_extractors={})
+    model = create_extraction_model(config, allowed_models, allowed_extractors={})
     
     assert isinstance(model.shape["root"].model, JsonExtractionModel)
     assert model.shape["root"].model.shape["id"].query == jmes_path("id")
@@ -101,4 +101,4 @@ def test_create_json_nested_parsing_model():
 def test_create_parsing_model_unsupported_type():
     config = {"type": "unknown", "model": {}}
     with pytest.raises(ValueError, match="Unsupported model type"):
-        create_parsing_model(config, {}, {})
+        create_extraction_model(config, {}, {})

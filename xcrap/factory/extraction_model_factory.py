@@ -6,7 +6,7 @@ from ..extractor.json_extraction_model import JsonBaseField, JsonExtractionModel
 from .extractor_factory import create_extractor
 
 
-def create_parsing_model(
+def create_extraction_model(
     model_config: Dict[str, Any],
     allowed_models: Dict[str, Type[ExtractionModel]],
     allowed_extractors: Dict[str, Any],
@@ -43,7 +43,7 @@ def create_parsing_model(
 
         # Handle nested
         if "nested" in field_data:
-            nested_model = create_parsing_model(
+            nested_model = create_extraction_model(
                 field_data["nested"], allowed_models, allowed_extractors, extractor_argument_separator
             )
 
