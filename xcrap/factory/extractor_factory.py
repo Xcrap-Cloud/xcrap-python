@@ -10,6 +10,14 @@ def create_extractor(
 ) -> ExtractorFunction:
     """
     Creates an extractor function from the specified text mapping or generator.
+
+    Args:
+        extractor_text: The string identifier for the extractor (optionally with arguments).
+        allowed_extractors: A dictionary mapping identifiers to extractor generators.
+        argument_separator: The character used to separate the identifier from arguments.
+
+    Returns:
+        A callable function that takes a Selector and returns the extracted data.
     """
     if argument_separator in extractor_text:
         key, *args = extractor_text.split(argument_separator)

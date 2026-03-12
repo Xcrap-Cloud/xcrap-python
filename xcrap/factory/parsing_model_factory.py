@@ -14,6 +14,15 @@ def create_parsing_model(
 ) -> ExtractionModel:
     """
     Creates a parsing model instance from a configuration dictionary.
+
+    Args:
+        model_config: A dictionary containing the model 'type' and 'model' schema.
+        allowed_models: A dictionary mapping model types to ExtractionModel classes.
+        allowed_extractors: A dictionary mapping extractor names to their generators.
+        extractor_argument_separator: The character used to split extractor keys from arguments.
+
+    Returns:
+        An instantiated ExtractionModel (HtmlExtractionModel or JsonExtractionModel).
     """
     model_type = model_config.get("type")
     if not model_type or model_type not in allowed_models:
