@@ -1,3 +1,6 @@
-from . import clients, core, extractor
+__author__ = "Marcuth <contact@marcuth.dev>"
+__version__ = "0.0.1"
 
-__all__ = ["clients", "core", "extractor"]
+from . import clients, core, extractor, factory
+
+__all__ = ["clients", "core", "extractor", "factory"]

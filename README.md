@@ -2,9 +2,9 @@
 
 Xcrap é um framework originalmente feito para Node.js, mas, digamos que eu também sou um desenvolvedor Python e, estava um pouco entediado; por isso, resolvi fazer uma versão para Python.
 
-Ainda está em fase experimental, e muito incompleto, só vou garantir o nome no PyPI, o resto, vou fazendo aos poucos. Talvez nos tornemos uma alternativa ao Scrapy, seria ambicioso demais da minha parte? Não sei, mas, vamos tentar, sou meio doido... (me contratem, Zyte :v)
+Ainda está em fase experimental, mas já conta com funcionalidades poderosas portadas da versão original em TypeScript, garantindo paridade entre os ecossistemas.
 
-## Como funciona (O que já temos)
+## 🚀 Como funciona
 
 A ideia é ser declarativo e fácil. Veja um exemplo de como você já pode usar o `xcrap` para extrair dados estruturados:
 
@@ -15,37 +15,22 @@ import asyncio
 
 # 1. Defina seus modelos de forma declarativa
 class AuthorModel(HtmlExtractionModel):
-    name = HtmlBaseField(
-        query = css("small.author::text")
-    )
-    link = HtmlBaseField(
-        query = css("a::attr(href)")
-    )
+    name = HtmlBaseField(query=css("small.author::text"))
+    link = HtmlBaseField(query=css("a::attr(href)"))
 
 class QuoteModel(HtmlExtractionModel):
-    text = HtmlBaseField(
-        query = css("span.text::text")
-    )
+    text = HtmlBaseField(query=css("span.text::text"))
     # Modelos aninhados sem esforço!
-    author = HtmlNestedField(
-        model = AuthorModel
-    ) 
-    tags = HtmlBaseField(
-        query = css("div.tags a.tag::text"),
-        multiple = True
-    )
+    author = HtmlNestedField(model=AuthorModel) 
+    tags = HtmlBaseField(query=css("div.tags a.tag::text"), multiple=True)
 
 class QuotesPageModel(HtmlExtractionModel):
-    quotes = HtmlNestedField(
-        query = css("div.quote"),
-        model = QuoteModel,
-        multiple = True
-    )
+    quotes = HtmlNestedField(query=css("div.quote"), model=QuoteModel, multiple=True)
 
 async def main():
     client = HttpxClient()
     
-    # 2. Busque a página (com suporte a retries, proxy, etc.)
+    # 2. Busque a página
     response = await client.fetch(url="http://quotes.toscrape.com")
 
     # 3. Transforme em um parser e extraia os dados
@@ -60,8 +45,59 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Extração de JSON (JMESPath)
+## ✨ Funcionalidades Principais
 
+### 🔒 Descriptografia Automática
+Suporte integrado para descriptografar respostas HTTP (AES-CBC/ECB).
+
+```python
+from xcrap.core import decrypt_client
+from xcrap.utils.decryption import DecryptConfig, DecryptKeyConfig
+
+config = DecryptConfig(
+    algorithm="aes-256-cbc",
+    key=DecryptKeyConfig(value="sua-chave-aqui"),
+    iv=DecryptKeyConfig(value="seu-iv-aqui")
+)
+
+@decrypt_client(config)
+class MySecureClient(HttpxClient):
+    pass
+
+# Todas as respostas deste cliente agora virão descriptografadas!
+```
+
+### 🏭 Sistema de Factories
+Crie modelos e clientes a partir de configurações JSON/Dicionários, ideal para sistemas dinâmicos.
+
+```python
+from xcrap.factory import create_parsing_model
+from xcrap.extractor import HtmlExtractionModel
+
+config = {
+    "type": "html",
+    "model": {
+        "title": {"query": {"type": "css", "value": "h1::text"}}
+    }
+}
+
+model = create_parsing_model(config, allowed_models={"html": HtmlExtractionModel})
+data = model.extract("<h1>Hello!</h1>")
+```
+
+### 🛠️ Extratores Customizados
+Você pode passar funções customizadas para processar campos individualmente:
+
+```python
+class MyModel(HtmlExtractionModel):
+    # 'extractor' permite transformar o dado logo após a captura
+    price = HtmlBaseField(
+        query=css(".price::text"), 
+        extractor=lambda text: float(text.replace("$", ""))
+    )
+```
+
+### 📊 Extração de JSON (JMESPath)
 Também suportamos extração de JSON usando JMESPath:
 
 ```python
@@ -73,42 +109,10 @@ class ProjectModel(JsonExtractionModel):
 
 content = '{"title": "Xcrap", "tags": ["python", "scraping"]}'
 parser = JsonParser(content)
-data = parser.extract_model(ProjectModel)
-print(data) # {'name': 'Xcrap', 'tags': ['python', 'scraping']}
+data = parser.extract_model(ProjectModel) # {'name': 'Xcrap', 'tags': ['python', 'scraping']}
 ```
 
-**Saída:**
-
-```
-Fetching http://quotes.toscrape.com ...
-
-Extracted Data:
-
-Quote 1:
-  Text: “The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”
-  Author: {'name': 'Albert Einstein', 'link': '/author/Albert-Einstein'}
-  Tags: change, deep-thoughts, thinking, world
-
-Quote 2:
-  Text: “It is our choices, Harry, that show what we truly are, far more than our abilities.”
-  Author: {'name': 'J.K. Rowling', 'link': '/author/J-K-Rowling'}
-  Tags: abilities, choices
-
-Quote 3:
-  Text: “There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.”
-  Author: {'name': 'Albert Einstein', 'link': '/author/Albert-Einstein'}
-  Tags: inspirational, life, live, miracle, miracles
-
-Full test passed successfully!
-```
-
-Eu não sou iniciante em web scraping, mas não posso dizer que sou um especialista também, não enfrentei muitos casos; então, peço que, se você souber de algo que eu não sei e puder me ajudar, que me ajude!
-
-O objetivo do Xcrap é ser modular, fácil de plugar com outros clientes Http (e usar até mesmo navegadores via Selenium ou seja qual lá biblioteca existir par isso), tratar JSON, HTML, Markdown (podendo lidar bem com um documento que tenha inclusive os 3 formatos sem problemas) de forma declarativa.
-
-Quero fazer um transformador de dados, mas, até o momento, não consegui fazer essa façanha nem no Node.js, que eu já tenho um ecossitema maior do Xcrap.
-
-## Desenvolvimento
+## 🛠️ Desenvolvimento
 
 Para rodar os testes e verificar a cobertura:
 
@@ -116,6 +120,7 @@ Para rodar os testes e verificar a cobertura:
 poetry run pytest --cov=xcrap --cov-report=term-missing
 ```
 
-Atualmente o projeto conta com **100% de cobertura de código**, garantindo a confiabilidade das extrações e do cliente HTTP.
+Atualmente o projeto conta com **100% de cobertura de código**, garantindo a confiabilidade de todas as funcionalidades.
 
-Enfim, estamos aceitando contribuições, precisamos documentar tudo isso, e muito mais! :D
+---
+Feito com ❤️ por Marcuth <contact@marcuth.dev>
