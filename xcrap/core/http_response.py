@@ -25,7 +25,7 @@ class HttpResponse:
         self.status = status
         self.status_text = status_text
         self.body = body
-        self.headers = headers
+        self.headers = {k.lower(): v for k, v in headers.items()}
         self.attempts = attempts
         self.failed_attempts = failed_attempts
 
