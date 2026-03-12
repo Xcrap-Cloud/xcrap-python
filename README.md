@@ -60,6 +60,23 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+### Extração de JSON (JMESPath)
+
+Também suportamos extração de JSON usando JMESPath:
+
+```python
+from xcrap.extractor import JsonExtractionModel, JsonBaseField, jmes_path, JsonParser
+
+class ProjectModel(JsonExtractionModel):
+    name = JsonBaseField(query=jmes_path("title"))
+    tags = JsonBaseField(query=jmes_path("tags"), multiple=True)
+
+content = '{"title": "Xcrap", "tags": ["python", "scraping"]}'
+parser = JsonParser(content)
+data = parser.extract_model(ProjectModel)
+print(data) # {'name': 'Xcrap', 'tags': ['python', 'scraping']}
+```
+
 **Saída:**
 
 ```

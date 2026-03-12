@@ -14,7 +14,12 @@ def xpath(query: str) -> QueryConfig:
     return {"value": query, "type": "xpath"}
 
 
+def jmes_path(query: str) -> QueryConfig:
+    return {"value": query, "type": "jmes_path"}
+
+
 __all__ = [
     "css",
     "xpath",
+    "jmes_path",
 ]
