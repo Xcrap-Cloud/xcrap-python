@@ -1,3 +1,4 @@
+from .decryptor import decrypt_client, decrypt_response, inject_decryptor
 from .http_client_base import (
     ExecuteRequestOptions,
     HttpClientBase,
@@ -11,4 +12,7 @@ __all__ = [
     "ExecuteRequestOptions",
     "HttpResponse",
     "FailedAttempt",
+    "inject_decryptor",
+    "decrypt_client",
+    "decrypt_response",
 ]
